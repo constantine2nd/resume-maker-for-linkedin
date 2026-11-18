@@ -1,0 +1,17 @@
+/* floating "📄 Make CV" button (src/floating-button.js): drag to move, × to hide */
+#l2r-btn { position: fixed; z-index: 2147483646; touch-action: none; }
+#l2r-btn .fb-main {
+  padding: 10px 16px; border: 0; border-radius: 20px;
+  background: #0a66c2; color: #fff; font: 600 14px/1 system-ui, sans-serif;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .25); cursor: grab; user-select: none; white-space: nowrap;
+}
+#l2r-btn .fb-main:disabled { opacity: .75; cursor: progress; }
+#l2r-btn.fb-dragging .fb-main { cursor: grabbing; box-shadow: 0 6px 18px rgba(0, 0, 0, .35); }
+#l2r-btn .fb-close {
+  position: absolute; top: -7px; right: -7px; width: 20px; height: 20px; padding: 0;
+  border: 1px solid #c8d0d8; border-radius: 50%; background: #fff; color: #444;
+  font: 700 13px/18px system-ui, sans-serif; cursor: pointer; box-shadow: 0 1px 4px rgba(0, 0, 0, .2);
+  opacity: 0; transition: opacity .15s;
+}
+#l2r-btn:hover .fb-close, #l2r-btn .fb-close:focus-visible { opacity: 1; }
+#l2r-btn.fb-dragging .fb-close { opacity: 0; }

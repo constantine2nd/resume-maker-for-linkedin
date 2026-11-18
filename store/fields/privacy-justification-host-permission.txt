@@ -1,0 +1,1 @@
+Shows the "Make CV" button on LinkedIn profile pages (https://www.linkedin.com/in/...) and, when the user clicks it, reads the profile they have open, including its "Show all" pages, to fill the resume. Nothing runs or is read until the user clicks the button.

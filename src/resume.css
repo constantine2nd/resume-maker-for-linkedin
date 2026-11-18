@@ -1,0 +1,124 @@
+/* ---------- page ---------- */
+:root { --panel-w: 270px; }
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  background: #e9ebee; color: #1d2226;
+  font: 14px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  display: grid; grid-template-columns: var(--panel-w) 1fr; min-height: 100vh;
+}
+body.empty { grid-template-columns: 1fr; }
+body.empty .panel { display: none; }
+
+/* ---------- settings panel ---------- */
+.panel {
+  position: sticky; top: 0; height: 100vh; overflow: auto;
+  padding: 16px; background: #fff; border-right: 1px solid #dcdfe3;
+}
+.panel fieldset { border: 0; border-top: 1px solid #eceef0; margin: 12px 0 0; padding: 10px 0 0; }
+.panel legend { font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: .04em; color: #555; padding: 0; }
+.panel label { display: flex; align-items: center; gap: 6px; margin: 6px 0; cursor: pointer; }
+.panel label.row { justify-content: space-between; }
+.panel .count { color: #888; font-size: 12px; }
+.panel .hint { margin: 6px 0; font-size: 12px; color: #666; }
+.panel .switch { font-weight: 600; margin-top: 12px; }
+.panel button { width: 100%; padding: 8px 12px; border-radius: 18px; border: 1px solid #0a66c2; background: #fff; color: #0a66c2; font-weight: 600; cursor: pointer; }
+.panel button.primary { background: #0a66c2; color: #fff; }
+.panel button.danger { border-color: #b42318; color: #b42318; }
+.panel button:disabled { opacity: .5; cursor: default; }
+.panel select, .panel input[type=color] { font: inherit; }
+
+/* ---------- stage + sheet ---------- */
+.stage { padding: 24px; overflow: auto; }
+#banner {
+  max-width: 210mm; margin: 0 auto 12px; padding: 10px 12px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+  background: #fff4e5; border: 1px solid #f5d7a8; border-radius: 8px; font-size: 13px;
+}
+#banner[hidden] { display: none; }
+#banner span { flex: 1 1 260px; }
+#banner button { padding: 6px 12px; border-radius: 16px; border: 1px solid #0a66c2; background: #fff; color: #0a66c2; font-weight: 600; cursor: pointer; }
+#banner button.primary { background: #0a66c2; color: #fff; }
+
+.cv {
+  --accent: #0a66c2;
+  width: 210mm; min-height: 297mm; margin: 0 auto; padding: 14mm 14mm;
+  background: #fff; box-shadow: 0 2px 10px rgba(0, 0, 0, .15);
+  font: 10.5pt/1.4 "Segoe UI", system-ui, -apple-system, Roboto, Helvetica, Arial, sans-serif; color: #222;
+}
+body[data-paper="Letter"] .cv { width: 8.5in; min-height: 11in; }
+
+/* ---------- shared CV parts ---------- */
+.cv h1.name { margin: 0; font-size: 24pt; line-height: 1.1; color: #111; letter-spacing: -.01em; }
+.cv .headline { margin-top: 3px; font-size: 11.5pt; color: #333; }
+.cv .contacts { margin-top: 6px; font-size: 9.5pt; color: #444; }
+.cv .contacts .sep { color: #aaa; }
+.cv .photo { width: 28mm; height: 28mm; border-radius: 50%; object-fit: cover; flex: none; }
+.cv h2 {
+  margin: 14px 0 6px; padding-bottom: 3px; font-size: 11pt; text-transform: uppercase; letter-spacing: .06em;
+  color: var(--accent); border-bottom: 1.5px solid var(--accent);
+}
+.cv .summary { margin: 0; white-space: pre-wrap; }
+.cv .entry { margin: 0 0 8px; position: relative; }
+.cv .entry-head { display: flex; justify-content: space-between; gap: 10px; align-items: baseline; }
+.cv .entry-title .title { font-weight: 700; }
+.cv .dates { flex: none; font-size: 9.5pt; color: #555; white-space: nowrap; }
+.cv .entry-sub { color: #333; }
+.cv .entry-sub .org { font-weight: 600; color: var(--accent); }
+.cv .sep { color: #999; }
+.cv .muted { color: #666; }
+.cv .desc { margin: 2px 0 0; white-space: pre-wrap; }
+.cv .jobskills { margin: 2px 0 0; font-size: 9pt; color: #666; font-style: italic; }
+.cv .tags { display: flex; flex-wrap: wrap; gap: 4px 5px; }
+.cv .tag { display: inline-block; padding: 1px 8px; border-radius: 10px; font-size: 9.5pt; background: color-mix(in srgb, var(--accent) 10%, #fff); border: 1px solid color-mix(in srgb, var(--accent) 30%, #fff); }
+.cv .lang { margin: 2px 0; position: relative; }
+
+/* ---------- classic: one column ---------- */
+.cv.classic .cv-head { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding-bottom: 6px; }
+
+/* ---------- sidebar: two columns ---------- */
+.cv.sidebar { display: grid; grid-template-columns: 62mm 1fr; padding: 0; }
+.cv.sidebar .cv-side { padding: 14mm 7mm 14mm 9mm; background: color-mix(in srgb, var(--accent) 8%, #fff); }
+.cv.sidebar .cv-main { padding: 14mm 12mm 14mm 9mm; min-width: 0; }
+.cv.sidebar .photo { display: block; width: 36mm; height: 36mm; margin: 0 auto 10px; }
+.cv.sidebar .contacts.stacked { margin-top: 0; overflow-wrap: anywhere; }
+.cv.sidebar .contacts.stacked > div { margin: 2px 0; }
+.cv.sidebar .cv-side h2 { font-size: 10pt; }
+.cv.sidebar .cv-side .entry-head { display: block; }
+.cv.sidebar .cv-side .dates { display: block; white-space: normal; }
+.cv.sidebar .cv-main h2:first-of-type { margin-top: 16px; }
+
+/* ---------- edit mode ---------- */
+.cv.editing .f { outline: 1px dashed transparent; border-radius: 2px; cursor: text; min-width: 1em; }
+.cv.editing .f:hover { outline-color: #9db8d8; }
+.cv.editing .f:focus { outline: 2px solid var(--accent); background: #fffbe6; }
+.cv.editing .f:empty::before { content: attr(data-placeholder); color: #b0b0b0; font-style: italic; }
+.cv.editing .tag-wrap { position: relative; }
+.cv .remove {
+  position: absolute; left: -18px; top: 0; width: 16px; height: 16px; padding: 0; border: 0; border-radius: 50%;
+  background: #fdecea; color: #b42318; font: 700 12px/16px system-ui; cursor: pointer;
+}
+.cv .tag-wrap .remove { left: auto; right: -6px; top: -6px; z-index: 1; }
+
+/* ---------- empty state ---------- */
+.empty-state { text-align: center; padding: 60mm 10mm; color: #444; }
+
+/* ---------- print ---------- */
+@media print {
+  html, body { background: #fff; display: block; }
+  .panel, #banner { display: none !important; }
+  .stage { padding: 0; overflow: visible; }
+  .cv { width: auto; min-height: 0; margin: 0; padding: 0; box-shadow: none; }
+  .cv.sidebar .cv-side { padding: 0 6mm 0 0; }
+  .cv.sidebar .cv-main { padding: 0 0 0 7mm; }
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .entry, .lang, .cv-head { break-inside: avoid; }
+  .cv h2 { break-after: avoid; }
+  .remove { display: none; }
+}
+
+@media (max-width: 900px) {
+  body { grid-template-columns: 1fr; }
+  .panel { position: static; height: auto; border-right: 0; border-bottom: 1px solid #dcdfe3; }
+  .stage { padding: 8px; }
+  .cv { transform-origin: top left; }
+}

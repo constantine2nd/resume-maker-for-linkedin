@@ -1,0 +1,52 @@
+{
+  "manifest_version": 3,
+  "name": "Resume Maker for LinkedIn",
+  "short_name": "Resume Maker",
+  "version": "1.0.0",
+  "description": "Turn your LinkedIn profile into a clean PDF resume in one click. Everything stays in your browser. Not affiliated with LinkedIn.",
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "permissions": [
+    "storage"
+  ],
+  "action": {
+    "default_title": "Open my resume",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png"
+    }
+  },
+  "background": {
+    "service_worker": "src/background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://www.linkedin.com/*"
+      ],
+      "js": [
+        "src/extract.js",
+        "src/floating-button.js",
+        "src/content.js"
+      ],
+      "css": [
+        "src/content.css"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "resume.html"
+      ],
+      "matches": [
+        "https://www.linkedin.com/*"
+      ]
+    }
+  ]
+}

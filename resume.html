@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CV</title>
+  <link rel="icon" href="icons/icon32.png">
+  <link rel="stylesheet" href="src/resume.css">
+  <style id="page-size">@page { size: A4; margin: 12mm; }</style>
+</head>
+<body>
+  <aside class="panel" aria-label="CV settings">
+    <button id="print" class="primary">Print / Save as PDF</button>
+    <p class="hint">In the print dialog choose <b>Save as PDF</b> and turn on <b>Background graphics</b>.</p>
+
+    <label class="switch"><input type="checkbox" id="edit"> Edit text</label>
+    <p class="hint" id="edit-hint" hidden>Click any text on the CV to change it. Add your email and phone at the top. × removes an entry.</p>
+
+    <fieldset>
+      <legend>Template</legend>
+      <label><input type="radio" name="template" value="classic"> Classic (one column)</label>
+      <label><input type="radio" name="template" value="sidebar"> Sidebar (two columns)</label>
+    </fieldset>
+
+    <fieldset>
+      <legend>Look</legend>
+      <label class="row">Accent color <input type="color" id="accent"></label>
+      <label class="row">Paper
+        <select id="paper"><option value="A4">A4</option><option value="Letter">Letter</option></select>
+      </label>
+      <label><input type="checkbox" id="showPhoto"> Photo</label>
+      <label><input type="checkbox" id="showDurations"> Job durations</label>
+      <label><input type="checkbox" id="showJobSkills"> Skills under jobs and projects</label>
+    </fieldset>
+
+    <fieldset id="sections">
+      <legend>Sections</legend>
+    </fieldset>
+
+    <fieldset>
+      <legend>LinkedIn button</legend>
+      <label><input type="checkbox" id="showButton"> Show 📄 Make CV on LinkedIn</label>
+      <button id="resetButton">Reset its position</button>
+      <p class="hint">Drag the button to move it; × on it hides it.</p>
+    </fieldset>
+
+    <fieldset>
+      <legend>Data</legend>
+      <p class="hint" id="data-info"></p>
+      <button id="reset" class="danger">Reset to LinkedIn data</button>
+      <p class="hint">To update: open your LinkedIn profile and click <b>📄 Make CV</b>.</p>
+    </fieldset>
+  </aside>
+
+  <main class="stage">
+    <div id="banner" hidden></div>
+    <article id="cv" class="cv"></article>
+  </main>
+
+  <script src="src/model.js"></script>
+  <script src="src/resume.js"></script>
+</body>
+</html>

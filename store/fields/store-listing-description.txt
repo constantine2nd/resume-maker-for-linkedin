@@ -1,0 +1,29 @@
+Turn your LinkedIn profile into a clean, professional resume (PDF) in one click.
+
+HOW IT WORKS
+1. Open your LinkedIn profile and click the "📄 Make CV" button.
+2. Your resume opens in a new tab. Choose a template, an accent color and the sections you want.
+3. Fix or add anything right on the page: click any text to edit it, add your email and phone, remove old jobs.
+4. Click "Print / Save as PDF".
+
+FEATURES
+• Two templates: Classic (one column) and Sidebar (two columns)
+• Your accent color, A4 or Letter paper, photo on or off
+• Experience, education, certifications, projects, skills, languages and courses
+• Full lists: the extension also reads your "Show all" pages (all skills, all projects…)
+• Edit any text in place; your edits are kept
+• Update from LinkedIn any time; if you have edited the resume, you choose what to keep
+• Real text in the PDF (selectable and searchable), clean page breaks
+• Move the button anywhere on the page, or hide it
+
+PRIVATE BY DESIGN
+• No account, no server, no tracking, no ads
+• Your profile is read only when you click the button
+• Everything is stored only on your computer and never sent anywhere
+• Open source (MIT): https://github.com/constantine2nd/resume-maker-for-linkedin
+
+NOTES
+• Works with LinkedIn's English interface.
+• Email and phone are not read from LinkedIn (they are hidden behind "Contact info"); add them on the resume page.
+
+Resume Maker for LinkedIn is not affiliated with, endorsed or sponsored by LinkedIn Corporation. LinkedIn is a trademark of LinkedIn Corporation.

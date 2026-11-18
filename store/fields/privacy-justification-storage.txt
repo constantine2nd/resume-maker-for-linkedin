@@ -1,0 +1,1 @@
+Keeps the profile data the user chose to read, their edited resume and their layout settings on their own device (chrome.storage.local), so the resume can be reopened and edited later. Nothing is sent anywhere.

@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <!-- everything below resolves from the project root, like the real extension page -->
+  <base href="../">
+  <title>Resume Maker test harness</title>
+</head>
+<body>
+  <!--
+    Loads the real resume.html with a stand-in for chrome.storage.local (kept in this site's localStorage).
+    Serve the project folder:  python3 -m http.server 8766
+    Open:  http://127.0.0.1:8766/test/harness.html?reset            (fresh made-up profile)
+           http://127.0.0.1:8766/test/harness.html?reset&newdata     (saved, edited CV + newer LinkedIn data)
+    window.print() is recorded in window.__printCalls instead of opening the dialog.
+  -->
+  <script src="test/fixture.js"></script>
+  <script>
+    (async () => {
+      const KEY = 'l2r-test-storage';
+      const read = () => JSON.parse(localStorage.getItem(KEY) || '{}');
+      const write = (o) => localStorage.setItem(KEY, JSON.stringify(o));
+      window.chrome = {
+        runtime: { getURL: (p) => '/' + p },
+        storage: { local: {
+          get: async (keys) => {
+            const all = read();
+            if (keys == null) return all;
+            const out = {};
+            for (const k of [].concat(keys)) if (k in all) out[k] = all[k];
+            return out;
+          },
+          set: async (o) => write({ ...read(), ...JSON.parse(JSON.stringify(o)) }),
+          remove: async (keys) => { const all = read(); for (const k of [].concat(keys)) delete all[k]; write(all); },
+        } },
+      };
+      window.__printCalls = 0;
+      window.print = () => { window.__printCalls++; };
+
+      const params = new URLSearchParams(location.search);
+      if (params.has('reset')) write({ 'l2r:extracted': window.L2RFixture() });
+      // optional look, used by scripts/screenshots.sh: &template=sidebar &accent=%230f766e &edit
+      if (params.has('template') || params.has('accent')) {
+        const s = read();
+        s['l2r:settings'] = { ...(s['l2r:settings'] || {}), ...(params.get('template') && { template: params.get('template') }), ...(params.get('accent') && { accent: params.get('accent') }) };
+        write(s);
+      }
+      if (params.has('newdata')) {
+        const { buildResume } = await import('/src/model.js').then(() => window.L2RModel).catch(() => ({}));
+        const old = window.L2RFixture('2026-10-01T10:00:00Z');
+        write({ 'l2r:extracted': window.L2RFixture(), 'l2r:resume': { ...buildResume(old), edited: true } });
+      }
+
+      // swap in the real page, then run its scripts in order
+      const html = await (await fetch('resume.html')).text();
+      const doc = new DOMParser().parseFromString(html, 'text/html');
+      for (const n of doc.head.children) if (n.tagName !== 'TITLE') document.head.append(document.importNode(n, true));
+      const scripts = [...doc.body.querySelectorAll('script')].map((s) => s.getAttribute('src'));
+      doc.body.querySelectorAll('script').forEach((s) => s.remove());
+      document.body.replaceChildren(...[...doc.body.childNodes].map((n) => document.importNode(n, true)));
+      for (const src of scripts) {
+        await new Promise((ok, fail) => {
+          const s = document.createElement('script');
+          s.src = src;
+          s.onload = ok;
+          s.onerror = fail;
+          document.body.append(s);
+        });
+      }
+      if (params.has('edit')) setTimeout(() => document.getElementById('edit').click(), 200);
+    })();
+  </script>
+</body>
+</html>

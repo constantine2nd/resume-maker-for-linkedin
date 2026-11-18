@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <base href="../">
+  <title>Resume Maker button harness</title>
+  <link rel="stylesheet" href="src/content.css">
+  <style>body { font: 14px system-ui, sans-serif; margin: 24px; min-height: 100vh; background: #f3f2ef; }</style>
+</head>
+<body>
+  <!--
+    The real "📄 Make CV" button (src/floating-button.js + src/content.js) with a fake extractor.
+    Serve the project folder (python3 -m http.server 8766), open http://127.0.0.1:8766/test/button-harness.html?reset
+    Clicks are counted in window.__opened; storage is kept in this site's localStorage.
+  -->
+  <p>Drag the button, click it, hover it and click × to hide it.
+     <button id="show">Show it again (like the CV page switch)</button></p>
+  <pre id="state"></pre>
+  <script>
+    const KEY = 'l2r-test-storage';
+    if (new URLSearchParams(location.search).has('reset')) localStorage.removeItem(KEY);
+    const read = () => JSON.parse(localStorage.getItem(KEY) || '{}');
+    const listeners = [];
+    window.chrome = {
+      runtime: { getURL: (p) => '/' + p },
+      storage: {
+        onChanged: { addListener: (fn) => listeners.push(fn) },
+        local: {
+          get: async (keys) => { const all = read(); const out = {}; for (const k of [].concat(keys)) if (k in all) out[k] = all[k]; return out; },
+          set: async (o) => {
+            const all = read();
+            const changes = {};
+            for (const [k, v] of Object.entries(o)) { changes[k] = { oldValue: all[k], newValue: v }; all[k] = v; }
+            localStorage.setItem(KEY, JSON.stringify(all));
+            listeners.forEach((fn) => fn(changes, 'local'));
+            document.getElementById('state').textContent = JSON.stringify(all['l2r:button'] || null);
+          },
+        },
+      },
+    };
+    window.__opened = 0;
+    window.open = () => { window.__opened++; };
+    window.L2RExtract = {
+      isProfileUrl: () => true,
+      extract: async (progress) => { progress('Loading…'); await new Promise((r) => setTimeout(r, 300)); return { profile: { name: 'Test' } }; },
+    };
+    document.getElementById('show').onclick = async () => {
+      const cur = (await chrome.storage.local.get('l2r:button'))['l2r:button'] || {};
+      chrome.storage.local.set({ 'l2r:button': { ...cur, hidden: false } });
+    };
+  </script>
+  <script src="src/floating-button.js"></script>
+  <script src="src/content.js"></script>
+</body>
+</html>

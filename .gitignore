@@ -1,0 +1,15 @@
+# OS / editors
+.DS_Store
+.idea/
+.vscode/
+
+# packed extension builds
+*.zip
+*.crx
+*.pem
+
+# Node (if tooling is added later)
+node_modules/
+
+# store upload packages (scripts/build.py)
+dist/

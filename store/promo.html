@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <!-- Chrome Web Store small promo tile, 440×280. Rendered to store/promo-440x280.png by scripts/screenshots.sh -->
+  <style>
+    html, body { margin: 0; width: 440px; height: 280px; overflow: hidden; }
+    body {
+      display: flex; align-items: center; gap: 22px; padding: 0 30px; box-sizing: border-box;
+      background: linear-gradient(135deg, #1e40af 0%, #2563eb 55%, #3b82f6 100%);
+      color: #fff; font-family: "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
+    }
+    .sheet {
+      flex: none; width: 112px; height: 150px; background: #fff; border-radius: 10px; position: relative;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, .25); padding: 16px 14px; box-sizing: border-box;
+    }
+    .sheet::after { content: ""; position: absolute; top: 0; right: 0; width: 26px; height: 26px; background: #bfd3fb; border-bottom-left-radius: 8px; border-top-right-radius: 10px; }
+    .dot { width: 26px; height: 26px; border-radius: 50%; background: #2563eb; margin-bottom: 12px; }
+    .line { height: 7px; border-radius: 4px; background: #93b4f5; margin: 7px 0; }
+    h1 { margin: 0 0 8px; font-size: 27px; line-height: 1.12; font-weight: 700; letter-spacing: -.01em; }
+    p { margin: 0; font-size: 15px; line-height: 1.35; opacity: .95; }
+    .pill { display: inline-block; margin-top: 12px; padding: 4px 11px; border-radius: 14px; background: rgba(255, 255, 255, .18); font-size: 13px; font-weight: 600; }
+  </style>
+</head>
+<body>
+  <div class="sheet" aria-hidden="true">
+    <div class="dot"></div>
+    <div class="line" style="width: 90%"></div>
+    <div class="line" style="width: 75%"></div>
+    <div class="line" style="width: 90%"></div>
+    <div class="line" style="width: 60%"></div>
+    <div class="line" style="width: 80%"></div>
+  </div>
+  <div>
+    <h1>Resume Maker for LinkedIn</h1>
+    <p>Your profile → a clean PDF resume, in one click.</p>
+    <span class="pill">Stays in your browser</span>
+  </div>
+</body>
+</html>

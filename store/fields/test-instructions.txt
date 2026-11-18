@@ -1,0 +1,4 @@
+1. Sign in to LinkedIn (any account) and open any profile at https://www.linkedin.com/in/<name>/ .
+2. Click "📄 Make CV" in the bottom-right corner. The page scrolls for a few seconds while it reads the profile.
+3. The resume opens in a new tab. Change template/sections on the left; tick "Edit text" to edit; click "Print / Save as PDF".
+The toolbar icon opens the saved resume without LinkedIn.

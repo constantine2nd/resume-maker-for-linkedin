@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Privacy policy – Resume Maker for LinkedIn</title>
+  <link rel="icon" href="icon128.png">
+  <link rel="stylesheet" href="site.css">
+</head>
+<body>
+  <main>
+    <p><a href="./">← Resume Maker for LinkedIn</a></p>
+    <h1>Privacy policy</h1>
+    <p class="muted">Resume Maker for LinkedIn (Chrome extension) · Last updated: 18 November 2026</p>
+
+    <h2>In short</h2>
+    <p>The extension reads the LinkedIn profile page you have open, <b>only when you click its “📄 Make CV” button</b>,
+       and turns it into a resume inside your browser. It stores that data <b>only on your device</b>.
+       Nothing is sent to the developer or to anyone else. There are no accounts, no analytics and no ads.</p>
+
+    <h2>What the extension reads</h2>
+    <p>When you click “📄 Make CV” on a LinkedIn profile page (<code>linkedin.com/in/…</code>), the extension reads what that
+       page and its “Show all” pages show: name, headline, location, website, profile photo link, About text, experience,
+       education, certifications, projects, skills, languages and courses. It does not read other pages, your messages,
+       your contacts or your LinkedIn account settings, and it does nothing until you click the button.</p>
+
+    <h2>What it stores, and where</h2>
+    <ul>
+      <li>The profile data it read, your edited resume (including an email address or phone number if you type them in),
+          your layout settings, and the position of the button.</li>
+      <li>All of this is kept in the extension's local storage (<code>chrome.storage.local</code>) on your computer.
+          It is not synced to your Google account and not uploaded anywhere.</li>
+      <li>It stays until you change it, click “Reset to LinkedIn data”, or remove the extension; removing the extension
+          deletes it.</li>
+    </ul>
+
+    <h2>What it sends</h2>
+    <p>Nothing leaves your browser except normal traffic to LinkedIn itself:</p>
+    <ul>
+      <li>To get complete lists, the extension opens your profile's “Show all” pages on linkedin.com (for example
+          <code>/details/skills/</code>) in a hidden frame, just as if you opened them yourself.</li>
+      <li>The resume page shows your profile photo, which your browser loads directly from LinkedIn's image server
+          (you can turn the photo off in the resume settings).</li>
+    </ul>
+    <p>No data is sent to the developer or to any other server, and there is no analytics or tracking code.</p>
+
+    <h2>Sharing and use</h2>
+    <ul>
+      <li>The data is not sold, shared with or transferred to third parties.</li>
+      <li>It is used only to create your resume, not for any other purpose.</li>
+      <li>It is not used to determine creditworthiness or for lending purposes.</li>
+    </ul>
+
+    <h2>Permissions</h2>
+    <ul>
+      <li><b>storage</b>: to keep your resume and settings on your device.</li>
+      <li><b>linkedin.com</b>: to show the “📄 Make CV” button on profile pages and read the profile you have open when you click it.</li>
+    </ul>
+
+    <h2>Contact</h2>
+    <p>Questions or problems: open an issue at
+       <a href="https://github.com/constantine2nd/resume-maker-for-linkedin/issues">github.com/constantine2nd/resume-maker-for-linkedin</a>.
+       The source code is public there (MIT license).</p>
+
+    <p class="muted">Resume Maker for LinkedIn is not affiliated with, endorsed or sponsored by LinkedIn Corporation.
+       LinkedIn is a trademark of LinkedIn Corporation.</p>
+  </main>
+</body>
+</html>
