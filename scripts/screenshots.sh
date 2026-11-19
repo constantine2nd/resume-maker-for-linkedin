@@ -2,6 +2,8 @@
 # Render the Chrome Web Store images with headless Chromium:
 #   store/screenshots/1-classic.png, 2-sidebar.png, 3-edit.png  (1280×800, the CV page with the made-up profile)
 #   store/promo-440x280.png                                    (small promo tile, from store/promo.html)
+#   docs/og-image.png                                          (1200×627 link-preview card, from store/og.html)
+#   docs/cv-sidebar.png                                        (copy of 2-sidebar.png for the landing page)
 # Usage: scripts/screenshots.sh [path-to-chrome]   (default: Playwright's chrome-headless-shell, then google-chrome/chromium)
 set -euo pipefail
 cd "$(dirname "$0")/.."
@@ -34,3 +36,5 @@ shot store/screenshots/1-classic.png 1280 800 "$BASE&template=classic&accent=%23
 shot store/screenshots/2-sidebar.png 1280 800 "$BASE&template=sidebar&accent=%230f766e"
 shot store/screenshots/3-edit.png    1280 800 "$BASE&template=classic&accent=%237c3aed&edit"
 shot store/promo-440x280.png         440  280 "http://127.0.0.1:$PORT/store/promo.html"
+shot docs/og-image.png               1200 627 "http://127.0.0.1:$PORT/store/og.html"
+cp store/screenshots/2-sidebar.png docs/cv-sidebar.png && echo docs/cv-sidebar.png

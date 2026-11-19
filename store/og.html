@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <!-- Link-preview card (Open Graph), 1200×627, shown when the landing page is shared on LinkedIn etc.
+       Rendered to docs/og-image.png by scripts/screenshots.sh -->
+  <style>
+    html, body { margin: 0; width: 1200px; height: 627px; overflow: hidden; }
+    body {
+      display: flex; align-items: center; gap: 48px; padding: 0 0 0 72px; box-sizing: border-box;
+      background: linear-gradient(135deg, #1e40af 0%, #2563eb 55%, #3b82f6 100%);
+      color: #fff; font-family: "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
+    }
+    .text { flex: 1 1 0; min-width: 0; }
+    .brand { display: flex; align-items: center; gap: 12px; font-size: 22px; font-weight: 600; opacity: .95; margin-bottom: 34px; }
+    .brand img { width: 44px; height: 44px; border-radius: 10px; background: #fff; padding: 4px; box-sizing: border-box; }
+    h1 { margin: 0 0 22px; font-size: 52px; line-height: 1.1; font-weight: 700; letter-spacing: -.015em; }
+    p { margin: 0; font-size: 25px; line-height: 1.38; opacity: .95; }
+    .pill { display: inline-block; margin-top: 30px; padding: 8px 18px; border-radius: 22px; background: rgba(255, 255, 255, .18); font-size: 19px; font-weight: 600; }
+    .cv {
+      flex: none; width: 470px; height: 466px; align-self: flex-end;  /* 800 × 60 % − 14 */
+      border-radius: 12px 0 0 0; overflow: hidden; background: #fff;
+      box-shadow: 0 18px 44px rgba(0, 0, 0, .3);
+    }
+    /* the CV sheet in the 1280×800 screenshot starts at x≈378, y≈24 */
+    .cv img { display: block; width: 768px; margin: -14px 0 0 -227px; }  /* 60 % of 1280 */
+  </style>
+</head>
+<body>
+  <div class="text">
+    <div class="brand"><img src="../icons/icon128.png" alt="">Resume Maker for LinkedIn</div>
+    <h1>Your LinkedIn profile is the source of truth.</h1>
+    <p>Recruiters check it anyway. Make your CV from it in one click, so the two never disagree.</p>
+    <span class="pill">Free · nothing leaves your browser</span>
+  </div>
+  <div class="cv" aria-hidden="true"><img src="screenshots/2-sidebar.png" alt=""></div>
+</body>
+</html>

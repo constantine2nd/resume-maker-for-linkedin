@@ -10,3 +10,13 @@ code { background: #eceef1; padding: 1px 5px; border-radius: 4px; font-size: .92
 .hero p { margin: 0; font-size: 18px; color: #3b4650; }
 .button { display: inline-block; margin-top: 16px; padding: 10px 22px; border-radius: 22px; background: #2563eb; color: #fff; font-weight: 600; text-decoration: none; }
 @media (max-width: 520px) { .hero { flex-direction: column; align-items: flex-start; } }
+.why { padding-left: 20px; }
+.why li { margin: 8px 0; }
+.shot { margin: 28px 0 8px; }
+.shot img { display: block; width: 100%; height: auto; border-radius: 10px; border: 1px solid #dfe3e8; box-shadow: 0 8px 24px rgba(15, 23, 42, .08); }
+.shot figcaption { margin-top: 8px; color: #5f6b76; font-size: 14px; text-align: center; }
+.why { padding-left: 20px; }
+.why li { margin: 8px 0; }
+.shot { margin: 28px 0 8px; }
+.shot img { display: block; width: 100%; height: auto; border-radius: 10px; border: 1px solid #dfe3e8; box-shadow: 0 8px 24px rgba(15, 23, 42, .08); }
+.shot figcaption { margin-top: 8px; color: #5f6b76; font-size: 14px; text-align: center; }

@@ -5,6 +5,10 @@ A Chrome extension that makes a CV (PDF) from your LinkedIn profile (repository:
 Open your profile, click **📄 Make CV**, adjust the look, **Print / Save as PDF**.
 Everything stays in your browser: no server, no account, nothing is sent anywhere.
 
+## Install
+
+From the Chrome Web Store: **[Resume Maker for LinkedIn](https://chromewebstore.google.com/detail/resume-maker-for-linkedin/bljdjefikplnmpfoophclaabmigoldof)** → *Add to Chrome*.
+
 ## Install (developer mode)
 
 1. Open `chrome://extensions` and turn on **Developer mode** (top right).
