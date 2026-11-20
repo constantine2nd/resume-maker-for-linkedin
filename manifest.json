@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Resume Maker for LinkedIn",
   "short_name": "Resume Maker",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Turn your LinkedIn profile into a clean PDF resume in one click. Everything stays in your browser. Not affiliated with LinkedIn.",
   "icons": {
     "16": "icons/icon16.png",

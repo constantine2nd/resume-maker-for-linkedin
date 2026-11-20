@@ -18,7 +18,7 @@ What's prepared in this repo, and the steps only you can do (account, payment, s
       privacy URL above and check it loads
 - [ ] **Test the package itself**: unzip `dist/…zip` into an empty folder → `chrome://extensions` → Load unpacked →
       make a CV from your profile, print to PDF
-- [ ] Version in `manifest.json` is the one you want (now `1.0.0`; every later upload needs a higher number)
+- [ ] Version in `manifest.json` is the one you want (now `1.0.1`; every later upload needs a higher number)
 
 ## In the Chrome Web Store
 
