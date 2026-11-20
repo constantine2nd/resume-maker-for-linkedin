@@ -153,7 +153,7 @@
       return section(
         name,
         ...list.map((l, i) =>
-          removable(el('div', 'lang', field('span', 'title', l, 'name', 'Language'), el('span', 'sep', ' — '), field('span', 'muted', l, 'proficiency', 'level')), list, i),
+          removable(el('div', 'lang', field('span', 'title', l, 'name', 'Language'), editing || l.proficiency ? el('span', 'sep', ' — ') : null, field('span', 'muted', l, 'proficiency', 'level')), list, i),
         ),
       );
     }

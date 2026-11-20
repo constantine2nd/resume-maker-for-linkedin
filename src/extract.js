@@ -129,7 +129,7 @@
 
   function parseExperience(lines) {
     // a range ("May 2017 - Present"), or one month with a duration ("Aug 2025 · 1 mo")
-    const di = lines.findIndex((l, i) => i > 0 && DATE_RE.test(l) && (/[-–]/.test(l) || /·\s*\d+\s*\p{L}/u.test(l)));
+    const di = lines.findIndex((l, i) => i > 0 && DATE_RE.test(l) && (/\s-\s|–/.test(l) || /·\s*\d+\s*\p{L}/u.test(l)));
     const [company, employmentType] = splitDot(lines[1]);
     const after = di >= 0 ? lines.slice(di + 1) : lines.slice(2);
     // a short line with a comma, right after the dates, is usually the location
@@ -170,19 +170,22 @@
 
   function parseCertification(lines) {
     const find = (re) => lines.find((l) => re.test(l)) || null;
-    const issued = find(/^Issued\b/);
-    const credential = find(/^Credential ID\b/);
+    // English labels first; otherwise by shape, after the name and issuer lines, so other interface languages work:
+    // "<label> ID <one token>" (de: "Zertifikats-ID …") and "<label> [month] <year>" (de: "Ausgestellt: Juni 2026")
+    const rest = lines.slice(2);
+    const credential = find(/^Credential ID\b/) || rest.find((l) => /^\p{L}[\p{L} -]{2,30}\bID:?\s+\S+$/u.test(l)) || null;
+    const issued = find(/^Issued\b/) || rest.find((l) => l !== credential && /^\p{L}+:?\s+(\p{L}+\.?\s+)?(19|20)\d{2}\b/u.test(l)) || null;
     return {
       name: lines[0] || null,
-      issuer: lines[1] && lines[1] !== issued ? lines[1] : null,
-      issued: issued ? issued.replace(/^Issued\s*/, '') : null,
-      credentialId: credential ? credential.replace(/^Credential ID\s*/, '') : null,
+      issuer: lines[1] && lines[1] !== issued && lines[1] !== credential ? lines[1] : null,
+      issued: issued ? issued.replace(/^\p{L}+:?\s+/u, '') : null,
+      credentialId: credential ? credential.replace(/^.*?\bID:?\s+/, '') : null,
       details: lines.slice(2).filter((l) => l !== issued && l !== credential),
       raw: lines,
     };
   }
 
-  const parseCourse = (lines) => ({ name: lines[0] || null, number: lines[1] && !/^Associated with/.test(lines[1]) ? lines[1] : null, details: lines.slice(1), raw: lines });
+  const parseCourse = (lines) => ({ name: lines[0] || null, number: lines[1] && !/^(Associated with|Verknüpft mit)/i.test(lines[1]) ? lines[1] : null, details: lines.slice(1), raw: lines });
   const parseSkill = (lines) => ({ name: lines[0], context: lines.slice(1) });
   const parseLanguage = (lines) => ({ name: lines[0], proficiency: lines[1] || null });
   const parseGeneric = (lines) => ({ title: lines[0], lines: lines.slice(1) });
@@ -200,8 +203,12 @@
   function parseTopCard(card) {
     const lines = linesOf(card);
     const find = (re) => lines.find((l) => re.test(l)) || null;
-    const ci = lines.indexOf('Contact info');
-    const beforeContact = (ci >= 0 ? lines.slice(0, ci) : lines.slice(0, 3)).filter((l) => l !== '·');
+    // the "Contact info" line, found by its link so the interface language doesn't matter
+    const contactText = clean(card.querySelector('a[href*="/overlay/contact-info"]')?.innerText);
+    let ci = contactText ? lines.indexOf(contactText) : -1;
+    if (ci < 0) ci = lines.findIndex((l) => /^(Contact info|Kontaktinfo)$/i.test(l));
+    // "·" separators and, on someone else's profile, the "· 1st" connection badges
+    const beforeContact = (ci >= 0 ? lines.slice(0, ci) : lines.slice(0, 3)).filter((l) => !/^·/.test(l));
     // profile photo = the largest square picture; the first image is the wide cover photo, small squares are logos
     const img = [...card.querySelectorAll('img')]
       .filter((i) => i.src && !/^data:/.test(i.src) && !/cover/i.test(i.alt || ''))
@@ -292,16 +299,21 @@
       // Languages can come as flat "name, proficiency, name, proficiency…" lines
       if (key === 'languages' && items.every((l) => l.length === 1)) {
         const lines = items.flat();
+        // "Languages (2)" with 4 lines: every language has a level, whatever the interface language
+        const allPaired = h.count > 0 && lines.length === 2 * h.count;
+        const isLevel = (l) => /proficiency|kenntnisse|fließend|verhandlungssicher|muttersprache/i.test(l || '');
         items = [];
-        for (let i = 0; i < lines.length; i += /proficiency/i.test(lines[i + 1] || '') ? 2 : 1) {
-          items.push(/proficiency/i.test(lines[i + 1] || '') ? lines.slice(i, i + 2) : [lines[i]]);
+        for (let i = 0; i < lines.length; ) {
+          const two = allPaired || isLevel(lines[i + 1]);
+          items.push(lines.slice(i, i + (two ? 2 : 1)));
+          i += two ? 2 : 1;
         }
       }
       const parse = PARSERS[key] || parseGeneric;
       sections[key] = items.map(parse);
 
       const more = showAllUrl(card);
-      if (more) truncated.push({ section: key, shown: items.length, total: h.count, detailsUrl: more });
+      if (more) truncated.push({ section: key, heading, shown: items.length, total: h.count, detailsUrl: more });
     }
 
     for (const k of ['experience', 'education', 'skills']) {
@@ -332,11 +344,14 @@
 
   // Two layouts: per-item div[componentkey] blocks (loaded in chunks of 10), or plain nested divs.
   // For the first, grow each leaf up to the largest container holding no other item (keeps descriptions).
-  function detailItems(card, section) {
+  // heading: the section's title on the profile ("Skills" / "Kenntnisse"); the details page repeats it as a line
+  function detailItems(card, section, heading) {
     const leaves = detailLeaves(card);
     if (leaves.length < 2) {
       const word = (section || '').toLowerCase().replace(/s$/, '').slice(0, 6);
-      return splitItems(card, true).filter((l) => !(l.length === 1 && word && l[0].toLowerCase().includes(word)));
+      const title = (heading || '').toLowerCase();
+      const isHeading = (l) => l.length === 1 && ((word && l[0].toLowerCase().includes(word)) || (title && l[0].toLowerCase() === title));
+      return splitItems(card, true).filter((l) => !isHeading(l));
     }
     return leaves
       .map((leaf) => {
@@ -381,7 +396,7 @@
   }
 
   // load a details page in a hidden same-origin iframe and read its items
-  async function fetchDetailsSection(url, expectedTotal, onCount) {
+  async function fetchDetailsSection(url, expectedTotal, onCount, heading) {
     const scroller = findScroller();
     const keepTop = scroller.scrollTop;
     const frame = document.createElement('iframe');
@@ -398,7 +413,7 @@
       await loadAllDetailItems(frame.contentDocument, expectedTotal, onCount);
       const card = detailsCardIn(frame.contentDocument);
       if (!card) throw new Error('no "…Details" card on the page');
-      return detailItems(card, new URL(url).pathname.split('/').filter(Boolean)[3]);
+      return detailItems(card, new URL(url).pathname.split('/').filter(Boolean)[3], heading);
     } finally {
       frame.remove();
       scroller.scrollTop = keepTop; // scrollIntoView in the frame may move the page
@@ -411,8 +426,11 @@
     meta.detailsLoaded = [];
     for (const t of meta.truncatedSections) {
       try {
-        const items = await fetchDetailsSection(t.detailsUrl, t.total, (n) =>
-          onProgress?.(`Loading ${t.section}… ${n}${t.total ? '/' + t.total : ''}`),
+        const items = await fetchDetailsSection(
+          t.detailsUrl,
+          t.total,
+          (n) => onProgress?.(`Loading ${t.section}… ${n}${t.total ? '/' + t.total : ''}`),
+          t.heading,
         );
         const parse = PARSERS[t.section] || parseGeneric;
         const result = { section: t.section, shownOnProfile: t.shown, loaded: items.length, total: t.total };

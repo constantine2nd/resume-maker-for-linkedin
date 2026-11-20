@@ -48,7 +48,8 @@ are removed when the extension is removed.
 
 ## Limitations
 
-- Works with LinkedIn's current (2026) profile layout and the **English** interface. If LinkedIn changes its layout,
+- Works with LinkedIn's current (2026) profile layout and the **English** interface. The **German**
+  interface is supported in part and not fully tested yet. If LinkedIn changes its layout,
   sections may come out empty; the console (`[resume-maker]`) shows what was missing.
 - What the CV contains is what LinkedIn shows on the profile page and its "Show all" pages. Text that LinkedIn cuts
   with "…see more" is expanded first, but very long descriptions may still be shortened by LinkedIn.
