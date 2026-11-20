@@ -90,3 +90,15 @@ test('settings from an older version get the new defaults', () => {
   assert.equal(s.sections.courses, true);
   assert.equal(s.sections.experience, true);
 });
+
+test('German LinkedIn: noise dropped, "Kenntnisse" line separated', () => {
+  const { description, skills } = splitDetails(['Aktuell', 'Steuerung von Projekten.', '… mehr', 'Strategische Kommunikation, Klassisches Projektmanagement und +3 Kenntnisse']);
+  assert.deepEqual(description, ['Steuerung von Projekten.']);
+  assert.equal(skills, 'Strategische Kommunikation, Klassisches Projektmanagement und +3 Kenntnisse');
+  assert.deepEqual(splitDetails(['Alle 12 Kenntnisse anzeigen', 'Kenntnisse: M365 · SharePoint']), { description: [], skills: 'M365 · SharePoint' });
+});
+
+test('German noise filter keeps real sentences that look like LinkedIn links', () => {
+  assert.deepEqual(splitDetails(['Alle offenen Tickets im Dashboard anzeigen']).description, ['Alle offenen Tickets im Dashboard anzeigen']);
+  assert.deepEqual(splitDetails(['Projektleitung.', '… mehr anzeigen', '…see more', 'Alle anzeigen', 'Alle 5 Positionen anzeigen']).description, ['Projektleitung.']);
+});

@@ -196,7 +196,7 @@
       const main = el('div', 'cv-main', el('header', 'cv-head', nameBlock), ...SECTIONS.filter((s) => !SIDEBAR_LEFT.includes(s)).map(renderSection));
       cv.append(side, main);
     } else {
-      cv.append(el('header', 'cv-head', el('div', 'head-text', nameBlock, contacts(false)), photo()), ...SECTIONS.map(renderSection));
+      cv.append(el('header', 'cv-head', el('div', 'head-text', nameBlock, contacts(false)), photo()), ...SECTIONS.map(renderSection).filter(Boolean)); // append(null) would print "null"
     }
     document.title = `${b.name || 'CV'} - CV`; // the suggested PDF file name
     $('page-size').textContent = `@page { size: ${settings.paper}; margin: 12mm; }`;

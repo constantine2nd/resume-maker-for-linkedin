@@ -13,10 +13,18 @@
     sections: { summary: true, experience: true, education: true, certifications: true, projects: true, skills: true, languages: true, courses: false },
   };
 
-  // lines that are LinkedIn UI or leftovers, not CV content
-  const NOISE = /^(present|show all.*|show credential|see more|…\s*more|\d+\s+endorsements?|endorsed by .*)$/i;
-  // "PSD2, Software Architecture and +5 skills" / "Skills: Java · Scala"
-  const SKILLS_LINE = /(\band \+\d+ skills?$|^skills?:)/i;
+  // lines that are LinkedIn UI or leftovers, not CV content (English and German)
+  const NOISE = new RegExp(
+    '^(' +
+      ['present', 'show all.*', 'show credential', '(…\\s*)?see more', '…\\s*more', '\\d+\\s+endorsements?', 'endorsed by .*'].join('|') +
+      '|' +
+      ['aktuell', 'alle( \\d+)?( \\S+)? anzeigen', 'nachweis anzeigen', '(…\\s*)?mehr anzeigen', '…\\s*mehr', '\\d+\\s+kenntnisbestätigung(en)?'].join('|') +
+      ')$',
+    'i',
+  );
+  // "PSD2, Software Architecture and +5 skills" / "Skills: Java · Scala" / "Projektmanagement und +2 Kenntnisse"
+  const SKILLS_LINE = /(\b(and|und) \+\d+ (skills?|kenntnis(se)?)$|^(skills?|kenntnisse):)/i;
+  const SKILLS_PREFIX = /^(skills?|kenntnisse):\s*/i;
 
   const clean = (s) => (s == null ? '' : String(s).replace(/\s+/g, ' ').trim());
 
@@ -26,7 +34,7 @@
     for (const raw of lines || []) {
       const line = clean(raw);
       if (!line || NOISE.test(line)) continue;
-      if (SKILLS_LINE.test(line)) skills = line.replace(/^skills?:\s*/i, '');
+      if (SKILLS_LINE.test(line)) skills = line.replace(SKILLS_PREFIX, '');
       else description.push(line);
     }
     return { description, skills };

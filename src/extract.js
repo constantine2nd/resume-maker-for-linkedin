@@ -17,7 +17,11 @@
   };
   // cards that are UI noise, not profile data
   const IGNORED_CARDS = /(Topcard|SuggestedForYou|SalesInsightsOrHighlights|Activity|SupportedLocales|Services|Featured|ConnectedAccountsTopLevel)$/;
-  const DATE_RE = /\b(19|20)\d{2}\b|\bPresent\b/;
+  const DATE_RE = /\b(19|20)\d{2}\b|\bPresent\b/; // no German 'Heute': it also starts ordinary sentences, and a date line has a year anyway
+  // LinkedIn UI texts are matched in English and German
+  const CURRENT_RE = /^(present|aktuell)$/i; // a "current job" marker line
+  const SEE_MORE_RE = /^(…\s*)?(see more|mehr anzeigen)$|^…\s*(more|mehr)$/i;
+  const SHOW_ALL_RE = /^show all|^alle( \d+)?( \S+)? anzeigen\b/i; // 'Alle 26 Kenntnisse anzeigen'
 
   const clean = (s) => (s || '').replace(/\s+/g, ' ').trim();
   const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -106,7 +110,7 @@
 
   // only the section's own "Show all" link, not the per-item links
   function showAllUrl(card) {
-    const a = [...card.querySelectorAll('a')].find((x) => /^show all/i.test(clean(x.innerText)));
+    const a = [...card.querySelectorAll('a')].find((x) => SHOW_ALL_RE.test(clean(x.innerText)));
     return a ? a.href.split('?')[0] : null;
   }
 
@@ -118,17 +122,20 @@
 
   function parseDates(line) {
     const [range, duration] = splitDot(line);
-    const [start, end] = (range || '').split(/\s[-–]\s/).map(clean);
+    // "May 2017 - Present" (en) / "Dez. 2025–Heute" (de, no spaces around the dash)
+    const [start, end] = (range || '').split(/\s*–\s*|\s+-\s+/).map(clean);
     return { start: start || null, end: end || null, duration: duration || null };
   }
 
   function parseExperience(lines) {
-    const di = lines.findIndex((l, i) => i > 0 && DATE_RE.test(l) && /[-–]/.test(l));
+    // a range ("May 2017 - Present"), or one month with a duration ("Aug 2025 · 1 mo")
+    const di = lines.findIndex((l, i) => i > 0 && DATE_RE.test(l) && (/[-–]/.test(l) || /·\s*\d+\s*\p{L}/u.test(l)));
     const [company, employmentType] = splitDot(lines[1]);
     const after = di >= 0 ? lines.slice(di + 1) : lines.slice(2);
     // a short line with a comma, right after the dates, is usually the location
     let location = null;
-    if (after[0] && after[0].length < 80 && /,/.test(after[0]) && !/\.$/.test(after[0])) location = after.shift();
+    const li = after[0] && CURRENT_RE.test(after[0]) ? 1 : 0; // a "Present" marker can come first
+    if (after[li] && after[li].length < 80 && /,/.test(after[li]) && !/\.$/.test(after[li])) [location] = after.splice(li, 1);
     return {
       title: lines[0] || null,
       company: company || null,
@@ -251,7 +258,7 @@
       if (isIgnored(card)) continue;
       card.querySelectorAll('button').forEach((b) => {
         if (b.closest('a')) return;
-        if (/^(…\s*)?see more$|^…\s*more$/i.test(clean(b.innerText))) b.click();
+        if (SEE_MORE_RE.test(clean(b.innerText))) b.click();
       });
     }
   }
